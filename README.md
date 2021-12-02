@@ -7,6 +7,7 @@
 - Search books by tag's name.
 - Order books.
 - Signin and signup to application. (Bonus - 'Forgot your password?' feature)
+- Populate the empty database with fake generated users, authors, and books from CSV and Excel files.   
 
 ## Use the following entities:
 
@@ -68,11 +69,21 @@ Book has only one author.
 - https://www.baeldung.com/java-faker
 
 ### Security
-
+-  JWT
 - https://www.youtube.com/watch?v=7uxROJ1nduk
 - https://www.youtube.com/watch?v=yRnSUDx3Y8k&t=10s
-- https://www.udemy.com/course/oauth2-in-spring-boot-applications
+- https://www.youtube.com/watch?v=VVn9OG9nfH0&t=2371s   `Amigoscode JWT`
+- https://www.youtube.com/watch?v=her_7pa0vrg           `ROLES & PERMISSIONS USING ENUMS  1:01:51`
+                                 
+
+- KEYCLOAK
 - https://www.keycloak.org/
+- https://www.keycloak.org/docs/latest/getting_started/index.html 
+- https://www.udemy.com/course/oauth2-in-spring-boot-applications
+- https://www.baeldung.com/spring-boot-keycloak
+- https://github.com/eugenp/tutorials/tree/master/spring-boot-modules/spring-boot-keycloak
+- https://habr.com/ru/company/reksoft/blog/552346/
+- https://documenter.getpostman.com/view/7294517/SzmfZHnd#12b1b64f-372b-47b5-a01f-0418fd9515c4
 
 ### AMAZON
 
@@ -97,6 +108,10 @@ Book has only one author.
 - https://dzone.com/articles/spring-boot-2-with-junit-5-and-mockito-2-for-unit
 - https://docs.spring.io/spring-boot/docs/2.5.5/reference/html/features.html#features.testing
 - https://docs.spring.io/spring-boot/docs/2.1.1.RELEASE/reference/html/boot-features-testing.html
+ 
+### CSV / Excel
+- https://www.baeldung.com/java-microsoft-excel
+- https://www.baeldung.com/java-csv
 
 ### Other
 
