@@ -39,19 +39,18 @@ public class CustomUserDetails extends UserEntity implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    Collection<GrantedAuthority> authorities = new HashSet<>();
-    Set<PrivilegeEntity> permissions = new HashSet<>();
     Set<RoleEntity> roles = super.getRoles();
 
     if (roles == null)
-      return authorities;
+      return new HashSet<>();
+
+    Set<GrantedAuthority> authorities = new HashSet<>();
+    Set<PrivilegeEntity> permissions = new HashSet<>();
 
     roles.forEach((role) -> {
-      authorities.add(new SimpleGrantedAuthority(role.getName()));
       permissions.addAll(role.getPrivileges());
+      permissions.forEach((authority) -> authorities.add(new SimpleGrantedAuthority(authority.getName())));
     });
-    permissions.forEach((authority) ->
-            authorities.add(new SimpleGrantedAuthority(authority.getName())));
 
     return authorities;
   }

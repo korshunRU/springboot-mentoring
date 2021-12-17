@@ -34,7 +34,7 @@ public class CustomTokenProvider {
 
     public String generateToken(String email, Set<RoleEntity> roles) {
         Claims claims = Jwts.claims().setSubject(email);
-        claims.put("role", getRoleNames(roles));
+        claims.put("authorites", getPermissions(roles));
         Date expiration = new Date(new Date().getTime() + expirationTime);
         return Jwts.builder()
                 .setClaims(claims)
@@ -60,7 +60,7 @@ public class CustomTokenProvider {
     }
 
 
-    public String getEmailFromToken(String token) {
+    private String getEmailFromToken(String token) {
         return Jwts
                 .parser()
                 .setSigningKey(secret)
@@ -87,16 +87,16 @@ public class CustomTokenProvider {
         }
     }
 
-    public Set<String> getRoleNames(Set<RoleEntity> userRoles) {
-        Set<String> rolesNames = new HashSet<>();
+    private Set<String> getPermissions(Set<RoleEntity> userRoles) {
 
         if (userRoles == null)
-            return rolesNames;
+            return new HashSet<>();
+
+        Set<String> rolesNames = new HashSet<>();
 
         userRoles.forEach((role) -> {
             Set<PrivilegeEntity> permissions = role.getPrivileges();
             permissions.forEach((authority) -> rolesNames.add(authority.getName()));
-            rolesNames.add(role.getName());
         });
         return rolesNames;
     }
