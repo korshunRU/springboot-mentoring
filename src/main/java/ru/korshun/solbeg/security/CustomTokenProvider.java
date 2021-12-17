@@ -87,7 +87,7 @@ public class CustomTokenProvider {
         }
     }
 
-    public Set<String> getRoleNames(Collection<RoleEntity> userRoles) {
+    public Set<String> getRoleNames(Set<RoleEntity> userRoles) {
         Set<String> rolesNames = new HashSet<>();
 
         if (userRoles == null)
