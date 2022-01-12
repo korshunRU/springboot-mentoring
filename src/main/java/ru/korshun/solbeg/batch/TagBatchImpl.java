@@ -15,9 +15,9 @@ public class TagBatchImpl extends AbstractBatchImpl<Tag> {
     super(dataSource, fileName, Tag.class);
     setHeaders(new String[]{"id", "name"});
     setQuery(
-            "SET IDENTITY_INSERT tags ON; " +
-            "INSERT INTO tags (id, name) VALUES (:id, :name);"+
-            "SET IDENTITY_INSERT tags OFF;"
+            // "SET IDENTITY_INSERT tags ON; " +
+            "INSERT INTO tags (id, name) VALUES (:id, :name);"
+            // "SET IDENTITY_INSERT tags OFF;"
     );
   }
 

@@ -3,19 +3,22 @@ spring:
     name: exam_solbeg
   sql:
     init:
-      mode: never
+      mode: always
   datasource:
-    url: jdbc:sqlserver://127.0.0.1:6661;databaseName=test
-    username: test
-    password: test
-    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+#    url: jdbc:sqlserver://127.0.0.1:6661;databaseName=test
+    url: jdbc:postgresql://localhost:5432/solbeg
+    username: solbeg
+    password: solbeg
+#    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    driver-class-name: org.postgresql.Driver
   jpa:
     show-sql: false
     hibernate:
       ddl-auto: update
     properties:
-      dialect: org.hibernate.dialect.SQLServer2012Dialect
-    database: sql_server
+      dialect: org.hibernate.dialect.PostgreSQL10Dialect
+#    database: sql_server
+    database: postgresql
     open-in-view: false
     defer-datasource-initialization: true
   jackson:
@@ -24,7 +27,7 @@ spring:
     jdbc:
       initialize-schema: always
     job:
-      enabled: false
+      enabled: true
 
 server:
   port: 8888

@@ -25,7 +25,6 @@ import ru.korshun.solbeg.security.CustomAuthenticationFilter;
 import java.util.Arrays;
 
 
-@Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 @EnableGlobalMethodSecurity(

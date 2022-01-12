@@ -15,9 +15,9 @@ public class AuthorsBatchImpl extends AbstractBatchImpl<Author> {
     super(dataSource, fileName, Author.class);
     setHeaders(new String[]{"id", "firstName", "lastName"});
     setQuery(
-            "SET IDENTITY_INSERT authors ON; " +
-            "INSERT INTO authors (id, first_name, last_name) VALUES (:id, :firstName, :lastName);" +
-            "SET IDENTITY_INSERT authors OFF;"
+            // "SET IDENTITY_INSERT authors ON; " +
+            "INSERT INTO authors (id, first_name, last_name) VALUES (:id, :firstName, :lastName);"
+            // "SET IDENTITY_INSERT authors OFF;"
     );
   }
 
