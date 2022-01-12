@@ -1,0 +1,28 @@
+version: '2'
+
+services:
+  app:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    container_name: solbeg_exam
+    restart: unless-stopped
+    ports:
+      - "8888:8888"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/solbeg
+      - SPRING_DATASOURCE_USERNAME=solbeg
+      - SPRING_DATASOURCE_PASSWORD=solbeg
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
+
+  db:
+    image: 'postgres:latest'
+    container_name: db
+    environment:
+      - POSTGRES_DB=solbeg
+      - POSTGRES_USER=solbeg
+      - POSTGRES_PASSWORD=solbeg
+    volumes:
+      - .:/docker-entrypoint-initdb.d
