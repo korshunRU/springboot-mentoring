@@ -43,7 +43,7 @@ dependencies {
 
 	implementation 'org.postgresql:postgresql:42.3.1'
 
-//	implementation 'com.microsoft.sqlserver:mssql-jdbc:9.4.1.jre11'
+	implementation 'com.google.code.gson:gson:2.8.9'
 
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
@@ -51,10 +51,14 @@ dependencies {
 
 	implementation 'org.json:json:20211205'
 
+	implementation 'org.flywaydb:flyway-core:8.4.1'
+
 	annotationProcessor 'org.projectlombok:lombok:1.18.22'
 	annotationProcessor "org.mapstruct:mapstruct-processor:1.4.2.Final"
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
 }
 
 bootJar {
