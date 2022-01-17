@@ -13,12 +13,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.korshun.solbeg.config.exception.DataNotFoundException;
 import ru.korshun.solbeg.dto.BookDto;
 import ru.korshun.solbeg.dto.request.EditBookRequestDto;
-import ru.korshun.solbeg.utils.BaseResponse;
 import ru.korshun.solbeg.service.BookService;
+import ru.korshun.solbeg.utils.BaseResponse;
 
 @Slf4j
 @RestController
@@ -73,45 +73,33 @@ public class BookController {
   )
   @ApiResponse(
           responseCode = "200",
-          description = "Success",
-          content = @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(
-                          implementation = BookDto.class
-                  )
-          ))
+          description = "Success"
+          )
   @GetMapping(
           path = "/list",
           produces = MediaType.APPLICATION_JSON_VALUE
   )
   @ResponseStatus(HttpStatus.OK)
-  private BaseResponse<Page<BookDto>> getBooks(
+  private ResponseEntity<BaseResponse<Page<BookDto>>> getBooks(
           @RequestParam(value = "tag", required = false) String tag,
           @RequestParam(value = "title", required = false) String title,
           @RequestParam(value = "page", defaultValue = "0") int page,
           @RequestParam(value = "size", defaultValue = "15") int size
   ) {
 
-    Page<BookDto> resultPage;
     Pageable pageable = PageRequest.of(page, size);
+    Page<BookDto> resultPage;
 
-    try {
-      if (title != null && tag != null) {
-        resultPage = bookService.getBooksByTitleAndTag(title, tag, pageable);
-      } else if (title != null) {
-        resultPage = bookService.getBooksByTitle(title, pageable);
-      } else if (tag != null) {
-        resultPage = bookService.getBooksByTag(tag, pageable);
-      } else {
-        resultPage = bookService.getBooks(pageable);
-      }
-
-    } catch (DataNotFoundException e) {
-      log.error(e.getMessage());
-      return new BaseResponse<>(HttpStatus.NOT_FOUND, e.getMessage());
+    if (title != null && tag != null) {
+      resultPage = bookService.getBooksByTitleAndTag(title, tag, pageable);
+    } else if (title != null) {
+      resultPage = bookService.getBooksByTitle(title, pageable);
+    } else if (tag != null) {
+      resultPage = bookService.getBooksByTag(tag, pageable);
+    } else {
+      resultPage = bookService.getBooks(pageable);
     }
-
-    return new BaseResponse<>(resultPage);
+    return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse<>(resultPage));
   }
 
 
@@ -137,6 +125,16 @@ public class BookController {
                           in = ParameterIn.QUERY,
                           description = "Book fields")
           })
+  @ApiResponse(
+          responseCode = "401",
+          description = "Trying to access endpoint without autorization",
+          content = @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(
+                          implementation = BaseResponse.class
+                  )
+          )
+  )
   @ApiResponse(
           responseCode = "404",
           description = "Books not found by request parameters",
@@ -165,19 +163,12 @@ public class BookController {
           produces = MediaType.APPLICATION_JSON_VALUE
   )
   @ResponseStatus(HttpStatus.OK)
-  private BaseResponse<Void> editBook(
+  private ResponseEntity<BaseResponse<Void>> editBook(
           @RequestParam(value = "id") Long bookId,
           @RequestBody EditBookRequestDto bookRequestDto
   ) {
-
-    try {
-      bookService.edit(bookId, bookRequestDto);
-    } catch (DataNotFoundException e) {
-      log.error(e.getMessage());
-      return new BaseResponse<>(HttpStatus.NOT_FOUND, e.getMessage());
-    }
-
-    return new BaseResponse<>(HttpStatus.OK);
+    bookService.edit(bookId, bookRequestDto);
+    return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse<>(HttpStatus.OK));
   }
 
 
@@ -197,6 +188,16 @@ public class BookController {
   @ApiResponse(
           responseCode = "400",
           description = "Error, book not added",
+          content = @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(
+                          implementation = BaseResponse.class
+                  )
+          )
+  )
+  @ApiResponse(
+          responseCode = "401",
+          description = "Trying to access endpoint without autorization",
           content = @Content(
                   mediaType = "application/json",
                   schema = @Schema(
@@ -228,10 +229,9 @@ public class BookController {
           produces = MediaType.APPLICATION_JSON_VALUE
   )
   @ResponseStatus(HttpStatus.OK)
-  private BaseResponse<Void> newBook(@RequestBody EditBookRequestDto bookRequestDto) {
-
+  private ResponseEntity<BaseResponse<Void>> newBook(@RequestBody EditBookRequestDto bookRequestDto) {
     bookService.addBook(bookRequestDto);
-    return new BaseResponse<>(HttpStatus.OK);
+    return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse<>(HttpStatus.OK));
   }
 
 
@@ -248,6 +248,16 @@ public class BookController {
                           in = ParameterIn.QUERY,
                           description = "Book id")
           })
+  @ApiResponse(
+          responseCode = "401",
+          description = "Trying to access endpoint without autorization",
+          content = @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(
+                          implementation = BaseResponse.class
+                  )
+          )
+  )
   @ApiResponse(
           responseCode = "404",
           description = "Book with this id not found",
@@ -283,15 +293,9 @@ public class BookController {
           produces = MediaType.APPLICATION_JSON_VALUE
   )
   @ResponseStatus(HttpStatus.OK)
-  private BaseResponse<Void> delBook(@RequestParam(value = "id") Long bookId) {
-
-    try {
-      bookService.delBook(bookId);
-    } catch (DataNotFoundException e) {
-      log.error(e.getMessage());
-      return new BaseResponse<>(HttpStatus.NOT_FOUND, e.getMessage());
-    }
-    return new BaseResponse<>(HttpStatus.OK);
+  private ResponseEntity<BaseResponse<Void>> delBook(@RequestParam(value = "id") Long bookId) {
+    bookService.delBook(bookId);
+    return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse<>(HttpStatus.OK));
   }
 
 }

@@ -38,7 +38,7 @@ public class AuthService {
   private final SecurityConfig securityConfig;
 
 
-  public AuthResponseDto getUserDataOnSignIn(AuthRequestDto authRequest) throws BadCredentialsException {
+  public AuthResponseDto getUserDataOnSignIn(AuthRequestDto authRequest) {
 
     String email = authRequest.getEmail();
     String password = authRequest.getPassword();
@@ -59,7 +59,7 @@ public class AuthService {
 
 
   @Transactional
-  public void saveUser(SignUpRequestDto signUpRequest) throws UserExistException {
+  public void saveUser(SignUpRequestDto signUpRequest) {
     Optional<UserEntity> user = userRepository.findByEmail(signUpRequest.getEmail());
 
     if (user.isPresent()) {

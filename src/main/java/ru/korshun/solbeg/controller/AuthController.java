@@ -8,15 +8,15 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.korshun.solbeg.config.exception.UserExistException;
 import ru.korshun.solbeg.dto.request.AuthRequestDto;
 import ru.korshun.solbeg.dto.request.SignUpRequestDto;
 import ru.korshun.solbeg.dto.response.AuthResponseDto;
-import ru.korshun.solbeg.utils.BaseResponse;
 import ru.korshun.solbeg.service.AuthService;
+import ru.korshun.solbeg.utils.BaseResponse;
 
+//TODO Как убрать поля в зависимости от ситуации в @Schema(implementation = Class<?>) ?
 
 @Slf4j
 @RestController
@@ -32,17 +32,17 @@ public class AuthController {
   )
   @ApiResponse(
           responseCode = "200",
-          description = "Success",
-          content = @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(
-                          implementation = AuthResponseDto.class
-                  )
-          )
+          description = "Success"
   )
   @ApiResponse(
           responseCode = "400",
-          description = "Bad Request"
+          description = "Bad Request",
+          content = @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(
+                          implementation = BaseResponse.class
+                  )
+          )
   )
   @ResponseStatus(HttpStatus.OK)
   @RequestMapping(
@@ -50,19 +50,10 @@ public class AuthController {
           method = RequestMethod.POST,
           produces = MediaType.APPLICATION_JSON_VALUE
   )
-  public BaseResponse<AuthResponseDto> signIn(@RequestBody AuthRequestDto authRequest) {
-
-    try {
-      AuthResponseDto response = authService.getUserDataOnSignIn(authRequest);
-      log.info(String.format("Signin from %s success", authRequest.getEmail()));
-      return new BaseResponse<>(response);
-    } catch (BadCredentialsException e) {
-      log.error(e.getMessage());
-      return new BaseResponse<>(
-              HttpStatus.BAD_REQUEST,
-              e.getMessage());
-    }
-
+  public ResponseEntity<BaseResponse<AuthResponseDto>> signIn(@RequestBody AuthRequestDto authRequest) {
+    AuthResponseDto response = authService.getUserDataOnSignIn(authRequest);
+    log.info(String.format("Signin from %s success", authRequest.getEmail()));
+    return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse<>(response));
   }
 
   @Operation(
@@ -95,23 +86,10 @@ public class AuthController {
           method = RequestMethod.POST,
           produces = MediaType.APPLICATION_JSON_VALUE
   )
-  public BaseResponse<Void> signUp(@RequestBody SignUpRequestDto signUpRequest) {
-
-    try {
-      authService.saveUser(signUpRequest);
-    } catch (UserExistException e) {
-      log.error(e.getMessage());
-      return new BaseResponse<>(
-              HttpStatus.CONFLICT,
-              e.getMessage()
-      );
-    }
-
+  public ResponseEntity<BaseResponse<Void>> signUp(@RequestBody SignUpRequestDto signUpRequest) {
+    authService.saveUser(signUpRequest);
     log.info(String.format("Registration successfully: %s", signUpRequest.getEmail()));
-
-    return new BaseResponse<>(
-            HttpStatus.CREATED,
-            "Registration successfully");
+    return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse<>(HttpStatus.OK));
   }
 
 }

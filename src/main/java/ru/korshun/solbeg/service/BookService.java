@@ -28,7 +28,7 @@ public class BookService {
   private final BookMapper bookMapper;
 
   @Transactional
-  public Page<BookDto> getBooks(Pageable pageable) throws DataNotFoundException {
+  public Page<BookDto> getBooks(Pageable pageable) {
 
     Page<BookEntity> resultPage = bookRepository.findAll(pageable);
 
@@ -44,7 +44,7 @@ public class BookService {
   }
 
   @Transactional
-  public Page<BookDto> getBooksByTag(String tag, Pageable pageable) throws DataNotFoundException {
+  public Page<BookDto> getBooksByTag(String tag, Pageable pageable) {
     TagEntity tagEntity = tagRepository.findByNameIgnoreCase(tag);
 
     if (tagEntity == null) {
@@ -66,7 +66,7 @@ public class BookService {
   }
 
   @Transactional
-  public Page<BookDto> getBooksByTitle(String title, Pageable pageable) throws DataNotFoundException {
+  public Page<BookDto> getBooksByTitle(String title, Pageable pageable) {
 
     Page<BookEntity> resultPage = bookRepository.findByTitleContainingIgnoreCase(title, pageable);
 
@@ -83,8 +83,7 @@ public class BookService {
   }
 
   @Transactional
-  public Page<BookDto> getBooksByTitleAndTag(String title, String tag, Pageable pageable)
-          throws DataNotFoundException {
+  public Page<BookDto> getBooksByTitleAndTag(String title, String tag, Pageable pageable) {
     TagEntity tagEntity = tagRepository.findByNameIgnoreCase(tag);
     Page<BookEntity> resultPage;
 
@@ -110,7 +109,8 @@ public class BookService {
   @PreAuthorize(
           "hasAuthority('" + CustomUserDetails.PRIVILEGE_WRITE + "') or " +
           "hasAuthority('" + CustomUserDetails.PRIVILEGE_EDIT + "')")
-  public void edit(Long id, EditBookRequestDto bookRequestDto) throws DataNotFoundException {
+  public void edit(Long id, EditBookRequestDto bookRequestDto) {
+
     BookEntity bookEntity = bookRepository.findById(id).orElseThrow(() ->
             new DataNotFoundException("Book not found"));
 
@@ -159,7 +159,7 @@ public class BookService {
 
   @Transactional
   @PreAuthorize("hasAuthority('" + CustomUserDetails.PRIVILEGE_DELETE + "')")
-  public void delBook(long id) throws DataNotFoundException {
+  public void delBook(long id) {
 
     BookEntity bookEntity = bookRepository.findById(id).orElseThrow(() ->
             new DataNotFoundException("Book not found"));

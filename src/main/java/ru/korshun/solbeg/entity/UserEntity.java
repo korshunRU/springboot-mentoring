@@ -27,9 +27,6 @@ public class UserEntity {
   private String lastName;
 
   @Column(nullable = false)
-  private String address;
-
-  @Column(nullable = false)
   @Email
   private String email;
 
