@@ -28,12 +28,13 @@ public class CustomUserDetails extends UserEntity implements UserDetails {
             String firstName,
             String lastName,
             String email,
+            String address,
             String password,
             Long createdAt,
             Set<RoleEntity> role,
             boolean enabled
     ) {
-    super(id, firstName, lastName, email, password, createdAt, null, role);
+    super(id, firstName, lastName, email, address, password, createdAt, null, role);
     this.isEnabled = enabled;
   }
 
